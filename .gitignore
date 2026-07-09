@@ -1,0 +1,12 @@
+# Ignore compiled binaries
+*.out
+*.exe
+*.o
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore practice folders
+**/practice/
+
+**/setup
