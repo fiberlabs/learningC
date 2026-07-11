@@ -7,6 +7,7 @@ starting from zero and building up fundamentals.
 
 - `01-setup/` – Environment setup, Hello World
 - `02-basics/` – Variables, I/O, types, arithmetic
+- `03-control_flow/` – Branching, loops, state machines, randomness
 
 More modules will be added as I progress.
 
