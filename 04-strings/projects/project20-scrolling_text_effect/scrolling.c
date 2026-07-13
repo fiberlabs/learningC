@@ -2,16 +2,16 @@
 #include <string.h>
 #include <unistd.h>
 
-int main()
-{
-    char word[50] = "LOADING";
+int main() {
 
-    for (int i = 0; i < strlen(word); i++)
+    char text[] = "LOADING...";
+
+    size_t length = strlen(text);
+
+    for (size_t i = 0; i < length; i++)
     {
         usleep(300000);
-        printf("%s...\n", word + i);
+        printf("%s\n", text + i);
     }
-
     return 0;
 }
-
