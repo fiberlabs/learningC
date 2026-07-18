@@ -17,7 +17,7 @@ int main()
             printf("\n");
             printf("========== MENU ==========\n");
             printf("1. Add Item\n");
-            printf("2. Drop Last Item\n");
+            printf("2. Drop Item\n");
             printf("3. Show Inventory\n");
             printf("4. Exit Program\n");
             printf("==========================\n");
@@ -33,7 +33,8 @@ int main()
 
         // game logic
         int add_input = 0;
-        int exit_program = 0; //bool
+        int exit_program = 0; // bool
+        int delete_input = 0;
         switch (menu_input)
         {
         case 1:
@@ -62,7 +63,26 @@ int main()
             break;
 
         case 2:
-            printf("drop item logic\n");
+            if (count <= 0)
+            {
+                printf("slots are all empty...\n");
+            }
+            else
+            {
+                //print menu for deleting
+                for (int i = 0; i < count; i++)
+                {
+                    printf("SLOT %d: %d\n", i, inventory[i]);
+                }
+                printf("enter a index to remove: ");
+                scanf("%d", &delete_input);
+
+                for (int i = delete_input; i < count - 1; i++)
+                {
+                    inventory[i] = inventory[i + 1];
+                }
+                count--;
+            }
             break;
 
         case 3:
@@ -93,7 +113,8 @@ int main()
             break;
         }
 
-        if (exit_program){
+        if (exit_program)
+        {
             break;
         }
     }
