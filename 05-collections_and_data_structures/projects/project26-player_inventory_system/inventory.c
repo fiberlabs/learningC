@@ -33,6 +33,7 @@ int main()
 
         // game logic
         int add_input = 0;
+        int exit_program = 0; //bool
         switch (menu_input)
         {
         case 1:
@@ -52,13 +53,6 @@ int main()
                 // add it to the array
                 inventory[count] = add_input;
                 count++;
-
-                // remove this after testing
-                printf("\nTEST PRINT\n");
-                for (int i = 0; i < count; i++)
-                {
-                    printf("SLOT %d: %d\n", i, inventory[i]);
-                }
             }
             else
             {
@@ -77,7 +71,7 @@ int main()
             {
                 for (int i = 0; i < count; i++)
                 {
-                    printf("SLOT %d: %d\n");
+                    printf("SLOT %d: %d\n", i, inventory[i]);
                 }
             }
             else
@@ -88,11 +82,18 @@ int main()
             break;
 
         case 4:
-            printf("exit program logic\n");
+            // exit program logic
+            exit_program = 1;
+            printf("goodbye...\n");
+
             break;
 
         default:
             printf("invalid input or something went wrong\n");
+            break;
+        }
+
+        if (exit_program){
             break;
         }
     }
