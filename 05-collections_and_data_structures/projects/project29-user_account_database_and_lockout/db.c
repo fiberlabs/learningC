@@ -6,58 +6,64 @@ struct User
 {
     int id;
     int pin;
-    int locked; //bool
-    int failures; //tally
+    int locked; // bool... 0 is no, 1 is yes
+    int failed; // tally
 };
-
 
 int main()
 {
     struct User users[CAPACITY];
-    int count = 0;
+    int counter = 0;
 
-    //manually creating users
-    users[0].id = 100;
+    // manually creating the users
+    users[0].id = 1000;
     users[0].pin = 1234;
     users[0].locked = 0;
-    users[0].failures = 0;
-    count++;
+    users[0].failed = 0;
 
-    users[0].id = 101;
-    users[0].pin = 5678;
-    users[0].locked = 0;
-    users[0].failures = 0;
-    count++;
+    users[1].id = 1001;
+    users[1].pin = 5678;
+    users[1].locked = 1;
+    users[1].failed = 0;
 
-    users[0].id = 102;
-    users[0].pin = 1011;
-    users[0].locked = 0;
-    users[0].failures = 0;
-    count++;
+    users[2].id = 1002;
+    users[2].pin = 9121;
+    users[2].locked = 0;
+    users[2].failed = 0;
 
-    //ask the user for their ID
-    int user_input;
-    printf("enter your user id: ");
-    scanf("%d", &user_input);
+    // take user input and check if the user ID exists
+    int find_user_input;
+    int user_found = 0;
+    int the_user_id = 0;
+    int find_user_fail_tally = 0; // if this reaches 3, exit the program...
 
-    //see if ID is in the array
-    int found = 0;
-    for (int i = 0; i < count; i++)
+    while (1)
     {
-        if (users[i].id == user_input)
+        printf("enter your ID: ");
+        scanf("%d", &find_user_input);
+
+        if (find_user_input == users[0].id || find_user_input == users[1].id || find_user_input == users[2].id)
         {
-            found = 1;
+            user_found = 1;
+            the_user_id = find_user_input;
+            break;
+        }
+        else
+        {
+            printf("user not found, try again...\n");
+            find_user_fail_tally++;
+        }
+        
+        if (find_user_fail_tally >= 3)
+        {
+            printf("too many failed attempts, try again later...\n");
             break;
         }
     }
 
-    if (found == 0) { //if user ID was not found
-        printf("no existing user by that ID...\n");
+    if (user_found) {
+        printf("you are user %d\n", the_user_id);
     }
-    else { //if the user id was found now do this
-
-    }
-
 
     return 0;
 }
