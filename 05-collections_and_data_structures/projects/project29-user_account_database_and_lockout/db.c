@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 #define CAPACITY 3
 
@@ -31,38 +34,38 @@ int main()
     users[2].locked = 0;
     users[2].failed = 0;
 
-    // take user input and check if the user ID exists
-    int find_user_input;
-    int user_found = 0;
-    int the_user_id = 0;
-    int find_user_fail_tally = 0; // if this reaches 3, exit the program...
+    /*take user input and check if the user ID exists*/
+    char id_buffer[10];
+    int is_valid = 1; // bool
+    int stored_id = 0; //to hold the converted value
 
-    while (1)
+    printf("enter your User ID: ");
+    fgets(id_buffer, sizeof(id_buffer), stdin);
+    id_buffer[strcspn(id_buffer, "\n")] = '\0';
+
+    // validate the input
+    if (strlen(id_buffer) == 0)
     {
-        printf("enter your ID: ");
-        scanf("%d", &find_user_input);
+        is_valid = 0;
+    }
 
-        if (find_user_input == users[0].id || find_user_input == users[1].id || find_user_input == users[2].id)
-        {
-            user_found = 1;
-            the_user_id = find_user_input;
-            break;
-        }
-        else
-        {
-            printf("user not found, try again...\n");
-            find_user_fail_tally++;
-        }
-        
-        if (find_user_fail_tally >= 3)
-        {
-            printf("too many failed attempts, try again later...\n");
+    for (int i = 0; i < strlen(id_buffer); i++)
+    {
+        if (isdigit(id_buffer[i]) == 0)
+        { // if the char is not a digit
+            is_valid = 0;
             break;
         }
     }
 
-    if (user_found) {
-        printf("you are user %d\n", the_user_id);
+    //if it is valid, then convert... if not, then print error
+    if (is_valid == 1)
+    {
+        stored_id = atoi(id_buffer);
+        printf("you entered %d\n", stored_id);
+    }
+    else{
+        printf("error, thats not a valid arguement\n");
     }
 
     return 0;
