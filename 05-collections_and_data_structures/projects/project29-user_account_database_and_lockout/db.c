@@ -85,21 +85,79 @@ int main()
         }
     }
 
-    if (id_found == 0) {
+    if (id_found == 0)
+    {
         printf("no user by that ID exists\n");
         return 1;
     }
 
     // if the ID is found AND is not locked, then ask for the PIN... if not then tell the user
     // the account is locked, then exit the program
-    if (id_found == 1 && users[found_index].locked != 0)
+    if (id_found == 1 && users[found_index].locked == 0)
     {
-        // do something
+        int entered_pin;
+        int pin_correct = 0;
+        char pin_buffer[10];
+
+        while (users[found_index].failed < 3)
+        {
+            int is_validP = 1;
+
+            printf("enter your PIN: ");
+            fgets(pin_buffer, sizeof(pin_buffer), stdin);
+            pin_buffer[strcspn(pin_buffer, "\n")] = '\0';
+
+            // validate
+            if (strlen(pin_buffer) == 0)
+            {
+                is_validP = 0;
+            }
+
+            for (int i = 0; i < strlen(pin_buffer); i++)
+            {
+                if (!isdigit(pin_buffer[i]))
+                {
+                    is_validP = 0;
+                    break;
+                }
+            }
+
+            if (!is_validP)
+            {
+                printf("invalid PIN input\n");
+                continue; // ask again without counting as a failed login
+            }
+
+            entered_pin = atoi(pin_buffer);
+
+            if (entered_pin == users[found_index].pin)
+            {
+                users[found_index].failed = 0;
+                pin_correct = 1;
+                break;
+            }
+            else
+            {
+                users[found_index].failed++;
+                printf("WRONG PIN... %d attempt(s) remaining\n", 3 - users[found_index].failed);
+            }
+        }
+
+        if (pin_correct)
+        {
+            printf("welcome back user %d!\n", users[found_index].id);
+        }
+        else
+        {
+            users[found_index].locked = 1;
+            printf("too many failed attempts\n");
+        }
     }
     else
     {
         printf("account is locked\n");
         return 1;
     }
+
     return 0;
 }
