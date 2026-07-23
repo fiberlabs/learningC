@@ -1,3 +1,7 @@
+/*
+HAVE TO REFACTOR WITH ENUMS NOW
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
