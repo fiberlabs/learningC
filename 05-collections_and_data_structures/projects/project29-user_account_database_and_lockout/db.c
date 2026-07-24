@@ -1,7 +1,3 @@
-/*
-HAVE TO REFACTOR WITH ENUMS NOW
-*/
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -9,158 +5,147 @@ HAVE TO REFACTOR WITH ENUMS NOW
 
 #define CAPACITY 3
 
+enum AccountStatus
+{
+    ACTIVE,
+    LOCKED
+};
+
 struct User
 {
-    int id;
+    char username[100];
     int pin;
-    int locked; // bool... 0 is no, 1 is yes
-    int failed; // tally
+    enum AccountStatus status;
+    int failed_logins; // tally
 };
 
 int main()
 {
     struct User users[CAPACITY];
-    int counter = 0;
+    int count = 0;
 
-    // manually creating the users
-    users[0].id = 1000;
+    // now manually creating the users
+    strcpy(users[0].username, "fiberlabs");
     users[0].pin = 1234;
-    users[0].locked = 0;
-    users[0].failed = 0;
-    counter++;
+    users[0].status = ACTIVE;
+    users[0].failed_logins = 0;
+    count++;
 
-    users[1].id = 1001;
-    users[1].pin = 5678;
-    users[1].locked = 1;
-    users[1].failed = 0;
-    counter++;
+    strcpy(users[1].username, "johndoe");
+    users[1].pin = 1000;
+    users[1].status = LOCKED;
+    users[1].failed_logins = 0;
+    count++;
 
-    users[2].id = 1002;
-    users[2].pin = 9121;
-    users[2].locked = 0;
-    users[2].failed = 0;
-    counter++;
+    strcpy(users[2].username, "janedoe");
+    users[2].pin = 2000;
+    users[2].status = ACTIVE;
+    users[2].failed_logins = 0;
+    count++;
 
-    /*take user input and check if the user ID exists*/
-    char id_buffer[10];
-    int is_valid = 1;   // bool
-    int entered_id = 0; // to hold the converted value
+    /*ask the user to enter their username*/
+    char username_buffer[100];
+    int user_exists = 0; // bool (1 is yes, 0 is no)
+    int valid_input = 0;
 
-    printf("enter your User ID: ");
-    fgets(id_buffer, sizeof(id_buffer), stdin);
-    id_buffer[strcspn(id_buffer, "\n")] = '\0';
-
-    // validate the input
-    if (strlen(id_buffer) == 0)
+    while (1)
     {
-        is_valid = 0;
-    }
 
-    for (int i_validate = 0; i_validate < strlen(id_buffer); i_validate++)
-    {
-        if (isdigit(id_buffer[i_validate]) == 0)
-        { // if the char is not a digit
-            is_valid = 0;
-            break;
-        }
-    }
+        printf("enter your username: ");
+        fgets(username_buffer, sizeof(username_buffer), stdin);
+        username_buffer[strcspn(username_buffer, "\n")] = '\0';
 
-    // if it is valid, then convert... if not, then print error
-    if (is_valid == 1)
-    {
-        entered_id = atoi(id_buffer);
-    }
-    else
-    {
-        printf("error occured...\n");
-        return 1;
-    }
-
-    // check if the user ID exists in the database
-    int id_found = 0;                                            // bool
-    int found_index;                                             // to store the index of the found ID in the array
-    for (int i_existsQM = 0; i_existsQM < counter; i_existsQM++) // QM = question mark
-    {
-        if (entered_id == users[i_existsQM].id)
+        // validate input (BASIC STUFF)
+        if (strlen(username_buffer) == 0)
         {
-            id_found = 1;
-            found_index = i_existsQM;
-            break; // exit the loop once found
-        }
-    }
-
-    if (id_found == 0)
-    {
-        printf("no user by that ID exists\n");
-        return 1;
-    }
-
-    // if the ID is found AND is not locked, then ask for the PIN... if not then tell the user
-    // the account is locked, then exit the program
-    if (id_found == 1 && users[found_index].locked == 0)
-    {
-        int entered_pin;
-        int pin_correct = 0;
-        char pin_buffer[10];
-
-        while (users[found_index].failed < 3)
-        {
-            int is_validP = 1;
-
-            printf("enter your PIN: ");
-            fgets(pin_buffer, sizeof(pin_buffer), stdin);
-            pin_buffer[strcspn(pin_buffer, "\n")] = '\0';
-
-            // validate
-            if (strlen(pin_buffer) == 0)
-            {
-                is_validP = 0;
-            }
-
-            for (int i = 0; i < strlen(pin_buffer); i++)
-            {
-                if (!isdigit(pin_buffer[i]))
-                {
-                    is_validP = 0;
-                    break;
-                }
-            }
-
-            if (!is_validP)
-            {
-                printf("invalid PIN input\n");
-                continue; // ask again without counting as a failed login
-            }
-
-            entered_pin = atoi(pin_buffer);
-
-            if (entered_pin == users[found_index].pin)
-            {
-                users[found_index].failed = 0;
-                pin_correct = 1;
-                break;
-            }
-            else
-            {
-                users[found_index].failed++;
-                printf("WRONG PIN... %d attempt(s) remaining\n", 3 - users[found_index].failed);
-            }
-        }
-
-        if (pin_correct)
-        {
-            printf("welcome back user %d!\n", users[found_index].id);
+            valid_input = 0;
+            printf("you did not enter anything, try again");
+            continue;
         }
         else
         {
-            users[found_index].locked = 1;
-            printf("too many failed attempts\n");
+            valid_input = 1;
         }
-    }
-    else
-    {
-        printf("account is locked\n");
-        return 1;
+
+        /*now check if the username exists*/
+        int id_found = 0; // bool
+        int found_index;  // to store the index of the found ID from the array
+
+        if (valid_input)
+        {
+            for (int username_i = 0; username_i < count; username_i++)
+            {
+                if (strcmp(username_buffer, users[username_i].username) == 0)
+                {
+                    id_found = 1;
+                    found_index = username_i;
+                    break; // exit the for loop because we have found the user
+                }
+            }
+
+            if (!id_found) {
+                printf("no user by that username exists.\n");
+                continue;
+            }
+        }
+
+        /*if the account is not locked, then ask for the PIN code*/
+        int entered_pin;
+        int pin_correct = 0; // bool
+        char pin_buffer[10];
+
+        if (users[found_index].status == LOCKED)
+        {
+            printf("account is locked\n");
+            return 1;
+        }
+        else
+        {
+            while (users[found_index].failed_logins < 3)
+            {
+                int valid_pin_input = 1;
+
+                printf("enter your PIN code: ");
+                fgets(pin_buffer, sizeof(pin_buffer), stdin);
+                pin_buffer[strcspn(pin_buffer, "\n")] = '\0';
+
+                // validate input
+                if (strlen(pin_buffer) == 0)
+                {
+                    valid_pin_input = 0;
+                    printf("invalid input, try again\n");
+                    continue;
+                }
+
+                entered_pin = atoi(pin_buffer);
+
+                // compare them now
+                if (entered_pin == users[found_index].pin)
+                {
+                    users[found_index].failed_logins = 0; // reset tally
+                    pin_correct = 1;
+                    break;
+                }
+                else
+                {
+                    users[found_index].failed_logins++;
+                    printf("WRONG PIN... %d attempt(s) remaining\n", 3 - users[found_index].failed_logins);
+                }
+
+                if (users[found_index].failed_logins >= 3)
+                {
+                    users[found_index].status = LOCKED;
+                    printf("too many failed attempts, account is now locked\n");
+                    return 1;
+                }
+            }
+
+            if (pin_correct)
+            {
+                printf("welcome back %s!\n", users[found_index].username);
+                break; //will exit the while(1) loop
+            }
+        }
     }
 
     return 0;
