@@ -73,5 +73,15 @@ int main()
         }
     }
 
+    // printing result logic
+    if (winner_found)
+    {
+        printf("Winner: %c\n", winner);
+    }
+    else
+    {
+        printf("No winner.\n");
+    }
+
     return 0;
 }
