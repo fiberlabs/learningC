@@ -9,6 +9,7 @@ starting from zero and building up fundamentals.
 - `02-basics/` – Variables, I/O, types, arithmetic
 - `03-control_flow/` – Branching, loops, state machines, randomness
 - `04-strings/` – Strings, character arrays, raw memory, and text processing
+- `05-collections_and_data_structures/` – Arrays, structs, enums, unions, and multidimensional data
 
 More modules will be added as I progress.
 
