@@ -2,87 +2,67 @@
 
 int main()
 {
-
+    int game_won = 0; //bool
     char board[3][3] = {
-        {'X', 'O', 'X'},
-        {'O', 'X', 'O'},
-        {'X', '.', '.'}};
+        {'0', '0', 'X'},
+        {'0', 'X', '0'},
+        {'X', '0', '0'}
+    };
 
-    int winner_found = 0;
-    char winner = '.';
+    printf("BOARD:-\n");
+    for (int o = 0; o < 3; o++) {
 
-    // printing the board
-    printf("board:\n");
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            printf("%c ", board[i][j]);
+        for (int i = 0; i < 3; i++) {
+            printf("%c ", board[o][i]);
         }
         printf("\n");
     }
 
-    printf("\n");
+    char winning_player = '.';
+    while(1) {
 
-    /*win conditions*/
-    // checking columns
-    for (int j = 0; j < 3 && !winner_found; j++)
-    {
-        if (board[0][j] != '.' &&
-            board[0][j] == board[1][j] &&
-            board[1][j] == board[2][j])
-        {
-            winner = board[0][j];
-            winner_found = 1;
+        if (!game_won) {
+            //row condition
+            for (int row = 0; row < 3; row++) {
+                if (board[row][0] == board[row][1] && board[row][1] == board[row][2] && board[row][0] != '.') {
+                    winning_player = board[row][0];
+                    game_won = 1;
+                 }
+            }
         }
-    }
 
-    // checking rows
-    for (int i = 0; i < 3 && !winner_found; i++)
-    {
-        if (board[i][0] != '.' &&
-            board[i][0] == board[i][1] &&
-            board[i][1] == board[i][2])
-        {
-            winner = board[i][0];
-            winner_found = 1;
+        if (!game_won) {
+            //vert condition
+            for (int col = 0; col < 3; col++) {
+                if (board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[0][col] != '.') {
+                    winning_player = board[0][col];
+                    game_won = 1;
+                }
+            }
         }
-    }
 
-    // checking diagonal 1
-    if (!winner_found)
-    {
-        if (board[0][0] != '.' &&
-            board[0][0] == board[1][1] &&
-            board[1][1] == board[2][2])
-        {
-            winner = board[0][0];
-            winner_found = 1;
+        if (!game_won) {
+            //diagonal 1 (top left to bottom right)
+            if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '.') {
+                winning_player = board[0][0];
+                game_won = 1;
+            }
         }
-    }
 
-    // checking diagonal 2
-    if (!winner_found)
-    {
-        if (board[0][2] != '.' &&
-            board[0][2] == board[1][1] &&
-            board[1][1] == board[2][0])
-        {
-            winner = board[0][2];
-            winner_found = 1;
+        if (!game_won) {
+            //diagonal 2 (top right to bottom left)
+            if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != '.') {
+                winning_player = board[0][2];
+                game_won = 1;
+            }
         }
+
+        break;
     }
 
-    // printing result logic
-    if (winner_found)
-    {
-        printf("Winner: %c\n", winner);
+    if (game_won) {
+        printf("%c is the winner\n", winning_player);
     }
-    else
-    {
-        printf("No winner.\n");
-    }
-
 
     return 0;
 }
