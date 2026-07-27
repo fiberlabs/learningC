@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-enum CharacterStatus {
+enum CharacterStatus
+{
     ALIVE,
     DEAD
 };
@@ -20,6 +21,7 @@ struct Player
 void start_menu();
 void start_game();
 int room_chance();
+void treasure_room(struct Player *user);
 
 int main()
 {
@@ -43,53 +45,84 @@ void start_menu()
         fgets(smenu_buffer, sizeof(smenu_buffer), stdin);
         smenu_buffer[strcspn(smenu_buffer, "\n")] = 0;
 
-        if (strcmp(smenu_buffer, "yes") != 0 && strcmp(smenu_buffer, "no") != 0) {
+        if (strcmp(smenu_buffer, "yes") != 0 && strcmp(smenu_buffer, "no") != 0)
+        {
             printf("invalid input, try again\n");
             continue;
         }
-        else if (strcmp(smenu_buffer, "no") == 0) {
+        else if (strcmp(smenu_buffer, "no") == 0)
+        {
             printf("goodbye!\n");
             break;
         }
-        else {
-            //start the game
+        else
+        {
+            // start the game
             start_game();
             break;
         }
     }
 }
 
-void start_game() {
+void start_game()
+{
 
-    //create the player's character
+    // create the player's character
     struct Player user;
-    user.health = 30; //max is 50
+    user.health = 30; // max is 50
     user.gold = 0;
     user.potions = 1;
     user.status = ALIVE;
 
-    for (int room = 1; room < 6; room++) {
-        //generate the room chance
+    for (int room = 1; room < 6; room++)
+    {
+        // generate the room chance
         int scenario = room_chance();
 
         printf("room number: %d\n", room);
 
-        if (scenario <= 4) {
+        if (scenario <= 4)
+        {
             printf("monster room\n");
         }
-        else if (scenario <= 7) {
-            printf("treasure room\n");
+        else if (scenario <= 7)
+        {
+            treasure_room(&user);
         }
-        else if (scenario <= 9) {
+        else if (scenario <= 9)
+        {
             printf("trap room\n");
         }
-        else {
+        else
+        {
             printf("empty room\n");
         }
-
     }
 }
 
-int room_chance() {
+int room_chance()
+{
     return 1 + rand() % 10;
+}
+
+void treasure_room(struct Player *user)
+{
+    int gold_found = 10 + rand() % 21;
+    int found_potion = rand() % 2; // bool
+
+    if (!found_potion)
+    {
+    printf("you stumbled into a treasure room!\n");
+	printf("you found %d gold!\n", gold_found);
+	user->gold += gold_found;
+	printf("you now have %d gold and %d potion(s)\n", user->gold, user->potions);
+    }
+    else
+    {
+    printf("you stumbled into a treasure room!\n");
+	printf("you found %d gold and 1 potion!\n", gold_found);
+	user->gold += gold_found;
+	user->potions++;
+	printf("you now have %d gold and %d potion(s)\n", user->gold, user->potions);
+    }
 }
