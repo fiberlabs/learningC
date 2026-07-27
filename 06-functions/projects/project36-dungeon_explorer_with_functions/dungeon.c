@@ -1,5 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+enum CharacterStatus {
+    ALIVE,
+    DEAD
+};
 
 struct Player
 {
@@ -7,17 +14,16 @@ struct Player
     int attack_dmg;
     int potions;
     int gold;
+    enum CharacterStatus status;
 };
 
 void start_menu();
+void start_game();
+int room_chance();
 
 int main()
 {
-    // creating a player
-    struct Player user;
-    user.health = 30;
-    user.gold = 0;
-    user.potions = 1;
+    srand(time(NULL));
 
     start_menu();
 
@@ -47,8 +53,43 @@ void start_menu()
         }
         else {
             //start the game
-            printf("starting game\n");
+            start_game();
             break;
         }
     }
+}
+
+void start_game() {
+
+    //create the player's character
+    struct Player user;
+    user.health = 30; //max is 50
+    user.gold = 0;
+    user.potions = 1;
+    user.status = ALIVE;
+
+    for (int room = 1; room < 6; room++) {
+        //generate the room chance
+        int scenario = room_chance();
+
+        printf("room number: %d\n", room);
+
+        if (scenario <= 4) {
+            printf("monster room\n");
+        }
+        else if (scenario <= 7) {
+            printf("treasure room\n");
+        }
+        else if (scenario <= 9) {
+            printf("trap room\n");
+        }
+        else {
+            printf("empty room\n");
+        }
+
+    }
+}
+
+int room_chance() {
+    return 1 + rand() % 10;
 }
