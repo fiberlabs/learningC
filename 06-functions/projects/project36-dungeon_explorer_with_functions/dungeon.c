@@ -22,6 +22,7 @@ void start_menu();
 void start_game();
 int room_chance();
 void treasure_room(struct Player *user);
+void user_rest(struct Player *user);
 
 int main()
 {
@@ -77,7 +78,7 @@ void start_game()
     for (int room = 1; room < 6; room++)
     {
         // generate the room chance
-        int scenario = room_chance();
+        int scenario = 7; // room_chance();
 
         printf("room number: %d\n", room);
 
@@ -97,6 +98,11 @@ void start_game()
         {
             printf("empty room\n");
         }
+
+        if (room != 5)
+        {
+            user_rest(&user);
+        }
     }
 }
 
@@ -112,17 +118,57 @@ void treasure_room(struct Player *user)
 
     if (!found_potion)
     {
-    printf("you stumbled into a treasure room!\n");
-	printf("you found %d gold!\n", gold_found);
-	user->gold += gold_found;
-	printf("you now have %d gold and %d potion(s)\n", user->gold, user->potions);
+        printf("you stumbled into a treasure room!\n");
+        printf("you found %d gold!\n", gold_found);
+        user->gold += gold_found;
+        printf("you now have %d gold and %d potion(s)\n", user->gold, user->potions);
     }
     else
     {
-    printf("you stumbled into a treasure room!\n");
-	printf("you found %d gold and 1 potion!\n", gold_found);
-	user->gold += gold_found;
-	user->potions++;
-	printf("you now have %d gold and %d potion(s)\n", user->gold, user->potions);
+        printf("you stumbled into a treasure room!\n");
+        printf("you found %d gold and 1 potion!\n", gold_found);
+        user->gold += gold_found;
+        user->potions++;
+        printf("you now have %d gold and %d potion(s)\n", user->gold, user->potions);
+    }
+}
+
+void user_rest(struct Player *user)
+{
+    char rest_buffer[10];
+
+    while (1)
+    {
+        printf("do you want to rest (+5 HP)? (yes/no): ");
+        fgets(rest_buffer, sizeof(rest_buffer), stdin);
+        rest_buffer[strcspn(rest_buffer, "\n")] = 0;
+
+        if (strcmp(rest_buffer, "yes") != 0 && strcmp(rest_buffer, "no") != 0)
+        {
+            printf("invalid input, try again\n");
+            continue;
+        }
+        else if (strcmp(rest_buffer, "no") == 0)
+        {
+            printf("continuing journey...\n");
+            break;
+        }
+        else
+        {
+            if (user->health >= 50)
+            {
+                printf("you are already at max health... can not heal further\n");
+                continue;
+            }
+            else
+            {
+                user->health += 5;
+                if (user->health > 50) {
+                    user->health = 50;
+                }
+                printf("you now have %d health\n", user->health);
+                continue;
+            }
+        }
     }
 }
