@@ -23,6 +23,7 @@ void start_game();
 int room_chance();
 void treasure_room(struct Player *user);
 void user_rest(struct Player *user);
+void trap_room(struct Player *user);
 
 int main()
 {
@@ -78,7 +79,7 @@ void start_game()
     for (int room = 1; room < 6; room++)
     {
         // generate the room chance
-        int scenario = 7; // room_chance();
+        int scenario = room_chance();
 
         printf("room number: %d\n", room);
 
@@ -92,11 +93,16 @@ void start_game()
         }
         else if (scenario <= 9)
         {
-            printf("trap room\n");
+            trap_room(&user);
         }
         else
         {
-            printf("empty room\n");
+            printf("you found a empty room\n");
+        }
+
+        if (user.status == DEAD) {
+            printf("game over\n");
+            return;
         }
 
         if (room != 5)
@@ -170,5 +176,19 @@ void user_rest(struct Player *user)
                 continue;
             }
         }
+    }
+}
+
+void trap_room(struct Player *user) {
+    printf("OH NO! you fell into a trap room! :(\n");
+    int hp_lost = 5 + rand() % 11;
+    user->health -= hp_lost;
+
+    if (user->health <= 0) {
+        user->status = DEAD;
+    }
+    else {
+        printf("you took %d damage\n", hp_lost);
+        printf("you have %d HP left...\n", user->health);
     }
 }
