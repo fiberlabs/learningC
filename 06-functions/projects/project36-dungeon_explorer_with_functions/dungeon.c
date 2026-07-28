@@ -22,6 +22,7 @@ struct Monster
 {
     int health;
     int attack_dmg; // this will be randomly generated every turn
+    enum CharacterStatus status;
 };
 
 // function signatures
@@ -34,6 +35,7 @@ void trap_room(struct Player *user);
 void monster_room(struct Player *user, struct Monster *monster);
 int monster_room_menu(struct Player *user, struct Monster *monster);
 void drink_potion(struct Player *user);
+void attack_sequence(struct Player *user, struct Monster *monster);
 
 int main()
 {
@@ -98,6 +100,7 @@ void start_game()
             // create the monster
             struct Monster monster;
             monster.health = 5 + rand() % 11;
+            monster.status = ALIVE;
 
             monster_room(&user, &monster);
         }
@@ -123,6 +126,11 @@ void start_game()
         if (room != 5)
         {
             user_rest(&user);
+        }
+
+        if (user.health > 0 && room == 5) {
+            printf("you win... you survived all 5 rooms\n");
+            return;
         }
     }
 }
@@ -160,6 +168,7 @@ void user_rest(struct Player *user)
 
     while (1)
     {
+        printf("current HP: %d\n", user->health);
         printf("do you want to rest (+5 HP)? (yes/no): ");
         fgets(rest_buffer, sizeof(rest_buffer), stdin);
         rest_buffer[strcspn(rest_buffer, "\n")] = 0;
@@ -212,9 +221,9 @@ void trap_room(struct Player *user)
     }
 }
 
-void monster_room(struct Player *user, struct Monster *monster) //test it out now
+void monster_room(struct Player *user, struct Monster *monster) // test it out now
 {
-    int user_input = 0;
+    int user_input;
 
     while (1)
     {
@@ -225,7 +234,24 @@ void monster_room(struct Player *user, struct Monster *monster) //test it out no
         {
             drink_potion(user);
         }
-        else {
+        else if (user_input == 1)
+        {
+            attack_sequence(user, monster);
+
+            if (monster->status == DEAD)
+            {
+                printf("You survived the encounter!\n");
+                break;
+            }
+
+            if (user->status == DEAD)
+            {
+                break;
+            }
+        }
+
+        else
+        {
             printf("still have to write this logic\n");
         }
     }
@@ -284,11 +310,11 @@ void drink_potion(struct Player *user)
             if (user->health > 50)
             {
                 user->health = 50;
-                printf("using potion... you now have %d health", user->health);
+                printf("using potion... you now have %d health\n", user->health);
                 return;
             }
 
-            printf("using potion... you now have %d health", user->health);
+            printf("using potion... you now have %d health\n", user->health);
             return;
         }
         else
@@ -297,4 +323,43 @@ void drink_potion(struct Player *user)
             return;
         }
     }
+}
+
+void attack_sequence(struct Player *user, struct Monster *monster)
+{
+    // ---------- Player attacks ----------
+    user->attack_dmg = 5 + rand() % 11; // 5-15
+
+    printf("\nYou attack the monster for %d damage!\n", user->attack_dmg);
+
+    monster->health -= user->attack_dmg;
+
+    if (monster->health <= 0)
+    {
+        monster->health = 0;
+        monster->status = DEAD;
+
+        printf("The monster has been defeated!\n");
+        return;
+    }
+
+    printf("Monster HP: %d\n", monster->health);
+
+    // ---------- Monster attacks ----------
+    monster->attack_dmg = 5 + rand() % 11; // 5-15
+
+    printf("The monster attacks you for %d damage!\n", monster->attack_dmg);
+
+    user->health -= monster->attack_dmg;
+
+    if (user->health <= 0)
+    {
+        user->health = 0;
+        user->status = DEAD;
+
+        printf("You have been slain!\n");
+        return;
+    }
+
+    printf("Your HP: %d\n\n", user->health);
 }
