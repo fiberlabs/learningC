@@ -35,3 +35,6 @@ int main(void)
     print_log(2, "Failed to open file 'data.bin'.\n");
     return 0;
 }
+
+//i will come back to finish this properly in a bit, idk why i cant get my head around the
+//concept right now
