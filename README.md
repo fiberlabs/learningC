@@ -10,14 +10,16 @@ starting from zero and building up fundamentals.
 - `03-control_flow/` – Branching, loops, state machines, randomness
 - `04-strings/` – Strings, character arrays, raw memory, and text processing
 - `05-collections_and_data_structures/` – Arrays, structs, enums, unions, and multidimensional data
+- `06-functions/` – Functions, program architecture, call stack, function pointers, modularity
 
 More modules will be added as I progress.
 
 ## Build & Run
 
-Each `.c` file is self-contained. To compile and run:
+Each `.c` file is self-contained (or paired with its own headers). To compile and run:
 
 ```bash
 gcc -Wall -Wextra file.c -o file
 ./file
 ```
+	
