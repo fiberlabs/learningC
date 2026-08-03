@@ -1,44 +1,40 @@
+//utils.c
+
 #include <stdio.h>
 #include <string.h>
 
-enum SignedInStatus{
-    SUCCESSFULL,
-    NOT_SUCCESSFULL
-};
+#include "utils.h"
 
-struct Account {
-    int id;
-    float balance;
-    char pin[5];
-    enum SignedInStatus status;
-};
-
-struct Account initialize_user(struct Account) {
+struct Account initialize_user(int id) {
     struct Account user;
-    user.id = 100;
-    strcpy(user.pin, "1234");
+    user.id = id;
     user.balance = 1000.00;
-}
 
-//create a function for a user login... return type int and use the enum
-int something() {
-    
-}
+    return user;
+};
 
 void deposit_amount(struct Account *account_parameter, float amount) {
-    printf("DEPOSITING %.2lf in Account ID: %d\n", amount, account_parameter->id);
+    printf("\nDEPOSITING %.2lf in Account ID: %d\n", amount, account_parameter->id);
     account_parameter->balance += amount;
+}
+
+void deposit_100(struct Account *account_parameter) {
+    deposit_amount(account_parameter, 100.00);
 }
 
 
 void withdraw_amount(struct Account *account_parameter, float amount) {
     if (account_parameter->balance - amount >= 0) {
+        printf("\nWITHDRAWING %.2lf in Account ID: %d\n", amount, account_parameter->id);
         account_parameter->balance -= amount;
-        display_balance(account_parameter);
     }
     else {
         printf("insufficient funds to process this transaction\n");
     }
+}
+
+void withdraw_50(struct Account *account_parameter) {
+    withdraw_amount(account_parameter, 50.00);
 }
 
 void display_balance(struct Account *account_parameter) {
