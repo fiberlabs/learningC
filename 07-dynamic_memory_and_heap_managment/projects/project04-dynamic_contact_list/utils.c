@@ -21,13 +21,14 @@ char *fill_phone_number(struct Details *created_struct_parameter)
     while ((phone_input = getchar()) != '\n' && phone_input != EOF)
     {
         //bounds check
-        if (number_of_bytes < 14) {
+        if (number_of_bytes < 13) {
             number_of_bytes++;
             created_struct_parameter->phone_number[index] = phone_input;
             index++;
         } 
         else {
             printf("exceeded 13 digits, exiting\n");
+            while ((phone_input = getchar()) != '\n' && phone_input != EOF); //clear input buffer
             break;
         }
     }
