@@ -62,6 +62,49 @@ char *get_contact_name()
     return name_buffer;
 }
 
+char *get_phone_number()
+{
+    int capacity = 16; //because phone numbers are usually bigger
+    char *phone_number_buffer = malloc(capacity * sizeof(char));
+
+    printf("enter contact's phone number: ");
+    int bytes_used = 0;
+    int index = 0;
+    int user_input;
+    while ((user_input = getchar()) != '\n' && user_input != EOF)
+    {
+        bytes_used++;
+
+        while (1)
+        {
+            if (bytes_used >= capacity - 1)
+            {
+                char *temp = realloc(phone_number_buffer, (capacity * 2) * sizeof(char));
+                if (temp == NULL) {
+                    printf("error in realloc for name_buffer\n");
+                    free(phone_number_buffer);
+                    phone_number_buffer = NULL;
+                    return NULL;
+                }
+
+                capacity *= 2;
+                phone_number_buffer = temp;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        phone_number_buffer[index] = user_input;
+        index++;
+    }
+
+    phone_number_buffer[bytes_used] = '\0';
+
+    return phone_number_buffer;
+}
+
 int main()
 {
     int number_of_contacts = how_many_contacts(&number_of_contacts);
@@ -78,7 +121,10 @@ int main()
         contacts[i] = malloc(3 * sizeof(char *));
         // fill in the name
         contacts[i][0] = get_contact_name();
-        printf("contact %d name: %s\n", i, contacts[i][0]);
+        printf("[DEBUG] contact %d name: %s\n", i, contacts[i][0]);
+        //fill in the phone_number
+        contacts[i][1] = get_phone_number();
+        printf("[DEBUG] contact %d phone number: %s\n", i, contacts[i][1]);
     }
 
     return 0;
