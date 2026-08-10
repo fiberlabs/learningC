@@ -173,5 +173,19 @@ int main()
         printf("[DEBUG] contact %d email address: %s\n", i, contacts[i][2]);
     }
 
+    //free the memory now
+    for (int j = 0; j < number_of_contacts; j++) {
+        for (int d = 0; d < number_of_contacts; d++) {
+            free(contacts[j][d]);
+            contacts[j][d] = NULL;
+        }
+
+        free(contacts[j]);
+        contacts[j] = NULL;
+    }
+
+    free(contacts);
+    contacts = NULL;
+
     return 0;
 }
