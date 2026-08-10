@@ -19,12 +19,12 @@ int how_many_contacts(int *number_of_contacts_para)
     return *number_of_contacts_para;
 }
 
-char *get_contact_name()
+char *get_contact_name(int i)
 {
     int capacity = 8;
     char *name_buffer = malloc(capacity * sizeof(char));
 
-    printf("enter contact's name: ");
+    printf("enter contact %d's name: ", i + 1); //+1 so its easier to understand
     int bytes_used = 0;
     int index = 0;
     int user_input;
@@ -161,21 +161,22 @@ int main()
 
     for (int i = 0; i < number_of_contacts; i++)
     {
+        printf("\n");
         contacts[i] = malloc(3 * sizeof(char *));
         // fill in the name
-        contacts[i][0] = get_contact_name();
-        printf("[DEBUG] contact %d name: %s\n", i, contacts[i][0]);
+        contacts[i][0] = get_contact_name(i);
+        printf("[DEBUG] contact %d name: %s\n", i + 1, contacts[i][0]);
         //fill in the phone_number
         contacts[i][1] = get_phone_number();
-        printf("[DEBUG] contact %d phone number: %s\n", i, contacts[i][1]);
+        printf("[DEBUG] contact %d phone number: %s\n", i + 1, contacts[i][1]);
         //fill in the phone_number
         contacts[i][2] = get_email_address();
-        printf("[DEBUG] contact %d email address: %s\n", i, contacts[i][2]);
+        printf("[DEBUG] contact %d email address: %s\n", i + 1, contacts[i][2]);
     }
 
     //free the memory now
     for (int j = 0; j < number_of_contacts; j++) {
-        for (int d = 0; d < number_of_contacts; d++) {
+        for (int d = 0; d < 3; d++) {
             free(contacts[j][d]);
             contacts[j][d] = NULL;
         }
