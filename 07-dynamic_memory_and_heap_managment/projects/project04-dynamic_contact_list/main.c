@@ -105,6 +105,49 @@ char *get_phone_number()
     return phone_number_buffer;
 }
 
+char *get_email_address()
+{
+    int capacity = 16; //because phone numbers are usually bigger
+    char *email_address_buffer = malloc(capacity * sizeof(char));
+
+    printf("enter contact's email address: ");
+    int bytes_used = 0;
+    int index = 0;
+    int user_input;
+    while ((user_input = getchar()) != '\n' && user_input != EOF)
+    {
+        bytes_used++;
+
+        while (1)
+        {
+            if (bytes_used >= capacity - 1)
+            {
+                char *temp = realloc(email_address_buffer, (capacity * 2) * sizeof(char));
+                if (temp == NULL) {
+                    printf("error in realloc for name_buffer\n");
+                    free(email_address_buffer);
+                    email_address_buffer = NULL;
+                    return NULL;
+                }
+
+                capacity *= 2;
+                email_address_buffer = temp;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        email_address_buffer[index] = user_input;
+        index++;
+    }
+
+    email_address_buffer[bytes_used] = '\0';
+
+    return email_address_buffer;
+}
+
 int main()
 {
     int number_of_contacts = how_many_contacts(&number_of_contacts);
@@ -125,6 +168,9 @@ int main()
         //fill in the phone_number
         contacts[i][1] = get_phone_number();
         printf("[DEBUG] contact %d phone number: %s\n", i, contacts[i][1]);
+        //fill in the phone_number
+        contacts[i][2] = get_email_address();
+        printf("[DEBUG] contact %d email address: %s\n", i, contacts[i][2]);
     }
 
     return 0;
