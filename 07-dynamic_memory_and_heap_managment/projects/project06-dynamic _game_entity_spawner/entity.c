@@ -36,13 +36,33 @@ char *get_name() {
     return name_to_return;
 }
 
+//im assuming its a 16 x 16 grid... no need to overcomplicate rn
+int pos_x() {
+    int x = rand() % 15;
+    return x;
+}
+
+int pos_y() {
+    int y = rand() % 15;
+    return y;
+}
+
 struct Enemy {
     char *name;
     int cordinate_x;
     int cordinate_y;
 };
 
-struct Enemy *spawn_enemy(char *name_parameter, int x_parameter, int y_parameter);
+struct Enemy *spawn_enemy() {
+    struct Enemy *created_enemy = malloc(sizeof(struct Enemy));
+    if (created_enemy == NULL) {printf("error in malloc for created_enemy\n"); return NULL;}
+    created_enemy->name = get_name();
+    if (created_enemy->name == NULL) {printf("get_name returned null, freeing created_enemy\n"); return NULL;}
+    created_enemy->cordinate_x = pos_x();
+    created_enemy->cordinate_y = pos_y();
+
+    return created_enemy;
+}
 
 int main() {
     srand(time(NULL));
