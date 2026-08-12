@@ -66,6 +66,18 @@ struct Enemy *spawn_enemy() {
 
 int main() {
     srand(time(NULL));
-    
-    return 0;
+    struct Enemy *enemies[3] = {spawn_enemy(), spawn_enemy(), spawn_enemy()};
+    //print the details of each enemy
+    for (int i = 0; i < 3; i++) {
+        printf("\nName: %s\n", enemies[i]->name);
+        printf("Pos X: %d\n", enemies[i]->cordinate_x);
+        printf("Pos Y: %d\n", enemies[i]->cordinate_y);
+    }
+
+    //now free the memory
+    for (int j = 0; j < 3; j++) {
+        free(enemies[j]->name);
+        free(enemies[j]);
+        enemies[j] = NULL;
+    }
 }
