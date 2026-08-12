@@ -38,12 +38,12 @@ char *get_name() {
 
 //im assuming its a 16 x 16 grid... no need to overcomplicate rn
 int pos_x() {
-    int x = rand() % 15;
+    int x = rand() % 16;
     return x;
 }
 
 int pos_y() {
-    int y = rand() % 15;
+    int y = rand() % 16;
     return y;
 }
 
@@ -57,11 +57,20 @@ struct Enemy *spawn_enemy() {
     struct Enemy *created_enemy = malloc(sizeof(struct Enemy));
     if (created_enemy == NULL) {printf("error in malloc for created_enemy\n"); return NULL;}
     created_enemy->name = get_name();
-    if (created_enemy->name == NULL) {printf("get_name returned null, freeing created_enemy\n"); return NULL;}
+    if (created_enemy->name == NULL) {printf("get_name returned null, freeing created_enemy\n"); free(created_enemy); return NULL;}
     created_enemy->cordinate_x = pos_x();
     created_enemy->cordinate_y = pos_y();
 
     return created_enemy;
+}
+
+void free_enemy_memory(struct Enemy *e) {
+    if (e == NULL) {
+        return;
+    }
+
+    free(e->name);
+    free(e);
 }
 
 int main() {
@@ -75,9 +84,8 @@ int main() {
     }
 
     //now free the memory
-    for (int j = 0; j < 3; j++) {
-        free(enemies[j]->name);
-        free(enemies[j]);
-        enemies[j] = NULL;
+    for (int k = 0; k < 3; k++) {
+        free_enemy_memory(enemies[k]);
+        enemies[k] = NULL;
     }
 }
