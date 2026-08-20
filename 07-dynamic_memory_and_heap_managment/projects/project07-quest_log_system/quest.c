@@ -7,6 +7,8 @@ struct Quest {
     struct Quest *next;
 };
 
+struct Quest *head = NULL;
+
 int menu_input() {
     int user_input = 0;
     printf("Choose an option:\n1. Add quest\n2. Print quests\n3. Exit program\n> ");
@@ -57,8 +59,28 @@ char *get_name() {
     return name_buffer;
 }
 
+struct Quest *new_quest(char *title_name_parameter) {
+    struct Quest *created_quest = malloc(sizeof(struct Quest));
+    created_quest->quest_name = title_name_parameter;
+    created_quest->next = NULL;
+
+    return created_quest;
+}
+
 int main() {
-    printf("entered name: %s\n", get_name());
+    int user_input = menu_input();
+
+    switch (user_input)
+    {
+    case 1:
+        head = new_quest(get_name());
+        //test, remove later
+        printf("Title: %s\n", head->quest_name);
+        break;
+    
+    default:
+        break;
+    }
 
     return 0;
 }
