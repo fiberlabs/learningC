@@ -39,11 +39,28 @@ struct Node *add_node(int id)
     return new_node;
 }
 
+void print_list() {
+    if (first_node == NULL) {
+        printf("there are no nodes to print\n");
+        return;
+    }
+
+    struct Node *current_node = NULL; 
+    current_node = first_node;
+    while (current_node != NULL) {
+        printf("ID: %d\nMemory Address: %p\n\n", current_node->id, (void *)current_node);
+        current_node = current_node->next;
+    }
+
+}
+
 int main()
 {
     add_node(10);
     add_node(20);
     add_node(30);
+
+    print_list();
 
     return 0;
 }
