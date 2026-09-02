@@ -21,37 +21,59 @@ struct Node *add_node(int id)
     new_node->id = id;
     new_node->next = NULL;
 
-    if (first_node == NULL) {
+    if (first_node == NULL)
+    {
         first_node = new_node;
         return new_node;
     }
 
     struct Node *current_node = NULL;
     current_node = first_node;
-    while (current_node->next != NULL) //as long as ->next != NULL
+    while (current_node->next != NULL) // as long as ->next != NULL
     {
-        current_node = current_node->next; //keep moving the finger onwards
+        current_node = current_node->next; // keep moving the finger onwards
     }
-    current_node->next = new_node; //once you reach NULL, append the new node
-    //creating the chain
-    
+    current_node->next = new_node; // once you reach NULL, append the new node
+    // creating the chain
 
     return new_node;
 }
 
-void print_list() {
-    if (first_node == NULL) {
+void print_list()
+{
+    if (first_node == NULL)
+    {
         printf("there are no nodes to print\n");
         return;
     }
 
-    struct Node *current_node = NULL; 
+    struct Node *current_node = NULL;
     current_node = first_node;
-    while (current_node != NULL) {
+    while (current_node != NULL)
+    {
         printf("ID: %d\nMemory Address: %p\n\n", current_node->id, (void *)current_node);
         current_node = current_node->next;
     }
+}
 
+void destroy_list()
+{
+    if (first_node == NULL)
+    {
+        printf("there are no nodes to destroy\n");
+        return;
+    }
+
+    struct Node *current_node = NULL;
+    current_node = first_node;
+    while (current_node != NULL)
+    {
+        struct Node *temp = current_node->next;
+        free(current_node);
+        current_node = temp;
+    }
+
+    first_node = NULL;
 }
 
 int main()
@@ -61,6 +83,9 @@ int main()
     add_node(30);
 
     print_list();
+
+    destroy_list();
+    print_list(); //this should fail
 
     return 0;
 }
