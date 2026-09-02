@@ -33,10 +33,30 @@ struct Quest *add_quest(char *name)
         current_quest = current_quest->next;
     }
     current_quest->next = new_quest;
+
+    return new_quest;
+}
+
+void print_quests() {
+    if (first_quest == NULL) {
+        printf("there are no quests to print\n");
+        return;
+    }
+
+    struct Quest *current_quest = NULL;
+    current_quest = first_quest;
+    while(current_quest != NULL) {
+        printf("Title: %s\nMemory Address: %p\n\n", current_quest->title, (void *)current_quest);
+        current_quest = current_quest->next;
+    }
+
 }
 
 int main()
 {
+    print_quests();
+    add_quest("slay the dragon");
+    print_quests();
 
     return 0;
 }
