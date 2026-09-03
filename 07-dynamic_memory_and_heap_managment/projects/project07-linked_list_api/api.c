@@ -1,66 +1,77 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node
-{
-    int id;
+struct Node {
+    int node_id;
+    struct Node *prev;
     struct Node *next;
 };
 
 static struct Node *first_node = NULL;
+static struct Node *last_node = NULL;
 
-struct Node *add_node(int id)
-{
+struct Node *spawn_node(int id_parameter) {
     struct Node *new_node = malloc(sizeof(struct Node));
-    if (new_node == NULL)
-    {
-        printf("error: malloc new_node");
+    if (new_node == NULL) {
+        printf("error: malloc for new_node returned NULL\n");
         return NULL;
     }
 
-    new_node->id = id;
+    new_node->node_id = id_parameter;
+    new_node->prev = NULL;
     new_node->next = NULL;
 
-    if (first_node == NULL)
-    {
+    if (first_node == NULL) {
         first_node = new_node;
         return new_node;
     }
 
     struct Node *current_node = NULL;
     current_node = first_node;
-    while (current_node->next != NULL) // as long as ->next != NULL
+    while (current_node->next != NULL)
     {
-        current_node = current_node->next; // keep moving the finger onwards
+        current_node = current_node->next;
     }
-    current_node->next = new_node; // once you reach NULL, append the new node
-    // creating the chain
+    current_node->next = new_node;
+    new_node->prev = current_node;
+
+    //by the time this line is reached, new_node is the last Node
+    last_node = new_node;
 
     return new_node;
 }
 
-void print_list()
-{
-    if (first_node == NULL)
-    {
-        printf("there are no nodes to print\n");
+void print_forward() {
+    if (first_node == NULL) {
+        printf("nothing to print\n");
         return;
     }
 
     struct Node *current_node = NULL;
     current_node = first_node;
-    while (current_node != NULL)
-    {
-        printf("ID: %d\nMemory Address: %p\n\n", current_node->id, (void *)current_node);
+    while(current_node != NULL) {
+        printf("ID: %d\n", current_node->node_id);
         current_node = current_node->next;
     }
 }
 
-void destroy_list()
-{
-    if (first_node == NULL)
-    {
-        printf("there are no nodes to destroy\n");
+void print_reverse() {
+    if (first_node == NULL) {
+        printf("nothing to print\n");
+        return;
+    }
+
+    struct Node *current_node = NULL;
+    current_node = last_node;
+    while(current_node != NULL) {
+        printf("ID: %d\n", current_node->node_id);
+        current_node = current_node->prev;
+    }
+}
+
+void destroy_nodes() {
+    if (first_node == NULL) {
+        printf("nothing to destroy :(\n");
         return;
     }
 
@@ -68,24 +79,27 @@ void destroy_list()
     current_node = first_node;
     while (current_node != NULL)
     {
-        struct Node *temp = current_node->next;
+        struct Node *temporary = NULL;
+        temporary = current_node->next;
         free(current_node);
-        current_node = temp;
+        current_node = temporary;
     }
 
     first_node = NULL;
+    last_node = NULL;
 }
 
-int main()
-{
-    add_node(10);
-    add_node(20);
-    add_node(30);
-
-    print_list();
-
-    destroy_list();
-    print_list(); //this should fail
+int main() {
+    print_forward();
+    print_reverse();
+    spawn_node(95);
+    spawn_node(96);
+    spawn_node(97);
+    spawn_node(98);
+    spawn_node(99);
+    print_forward();
+    print_reverse();
+    destroy_nodes();
 
     return 0;
 }
