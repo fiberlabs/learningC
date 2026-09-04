@@ -104,20 +104,24 @@ char *get_artist_name()
     return string_buffer;
 }
 
-struct Song *add_song(char *title_parameter, char *artist_parameter, float duration_parameter) {
-    struct Song *new_song = malloc(sizeof(struct Song));
-    if (new_song == NULL) {
-        printf("error: malloc for new_song");
-        return NULL;
-    }
-
-    if (title_parameter == NULL) {
+struct Song *add_song(char *title_parameter, char *artist_parameter, float duration_parameter)
+{
+    if (title_parameter == NULL)
+    {
         printf("error: get_song_name() returned NULL");
         return NULL;
     }
 
-    if (artist_parameter == NULL) {
+    if (artist_parameter == NULL)
+    {
         printf("error: get_artist_name() returned NULL");
+        return NULL;
+    }
+
+    struct Song *new_song = malloc(sizeof(struct Song));
+    if (new_song == NULL)
+    {
+        printf("error: malloc for new_song");
         return NULL;
     }
 
@@ -127,14 +131,16 @@ struct Song *add_song(char *title_parameter, char *artist_parameter, float durat
     new_song->prev = NULL;
     new_song->next = NULL;
 
-    if (first_song == NULL) {
+    if (first_song == NULL)
+    {
         first_song = new_song;
         return new_song;
     }
 
     struct Song *current_song = NULL;
     current_song = first_song;
-    while (current_song->next != NULL) {
+    while (current_song->next != NULL)
+    {
         current_song = current_song->next;
     }
     current_song->next = new_song;
