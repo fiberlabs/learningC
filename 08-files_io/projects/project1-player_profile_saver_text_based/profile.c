@@ -108,7 +108,51 @@ struct Profile *add_profile(char *name_parameter, int health_parameter, int leve
     return created_profile;
 }
 
-int main() {
+int main()
+{
+    char *name = get_name();
+
+    if (name == NULL) {
+        perror("name (for 'char *name_parameter') is NULL");
+        exit(1);
+    }
+
+    int hp = get_health();
+    int level = get_level();
+    struct Profile *profile1 = add_profile(name, hp, level);
+
+    FILE *fp = NULL;
+    fp = fopen("profiles.txt", "ab");
+    if (fp == NULL)
+    {
+        perror("fopen() returned NULL");
+        free(profile1->name);
+        profile1->name = NULL;
+        free(profile1);
+        profile1 = NULL;
+        exit(1);
+    }
+
+    fprintf(fp, "Name: \t%s\n", profile1->name);
+    fprintf(fp, "HP:   \t%d\n", profile1->hp);
+    fprintf(fp, "Level:\t%d\n", profile1->level);
+
+    if (fclose(fp) != 0)
+    {
+        perror("fclose() failed");
+        free(profile1->name);
+        profile1->name = NULL;
+        free(profile1);
+        profile1 = NULL;
+        exit(1);
+    }
+
+    free(profile1->name);
+    profile1->name = NULL;
+    free(profile1);
+    profile1 = NULL;
+
+    printf("Profile added successfully\n");
 
     return 0;
 }
