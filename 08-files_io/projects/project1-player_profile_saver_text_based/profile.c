@@ -112,7 +112,8 @@ int main()
 {
     char *name = get_name();
 
-    if (name == NULL) {
+    if (name == NULL)
+    {
         perror("name (for 'char *name_parameter') is NULL");
         exit(1);
     }
@@ -146,6 +147,22 @@ int main()
         profile1 = NULL;
         exit(1);
     }
+
+    //read logic
+    FILE *read_fp = fopen("profiles.txt", "r");
+    if (read_fp == NULL)
+    {
+        perror("fopen for reading returned NULL");
+        exit(1);
+    }
+
+    char line[256];
+    while (fgets(line, sizeof(line), read_fp) != NULL)
+    {
+        printf("%s", line);
+    }
+
+    fclose(read_fp);
 
     free(profile1->name);
     profile1->name = NULL;
