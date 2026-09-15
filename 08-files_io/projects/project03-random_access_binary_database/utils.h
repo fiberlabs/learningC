@@ -19,3 +19,7 @@ void add_record(char *name_parameter, int age_parameter, int salary_parameter);
 
 //list all functions
 void list_all();
+
+//list one record functions
+int list_indexes();
+void get_requested_index(int index_to_fetch);

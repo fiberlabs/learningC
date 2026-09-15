@@ -1,5 +1,6 @@
 // main.c
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "utils.h"
 
@@ -19,8 +20,8 @@ int main() {
         break;
 
     case 2:
-
         //VIEW RECORD LOGIC
+        get_requested_index(list_indexes());
         break;
 
     case 3:
@@ -30,6 +31,7 @@ int main() {
 
     case 4:
         //QUIT PROGRAM LOGIC
+        exit(1);
         break;
 
     default:

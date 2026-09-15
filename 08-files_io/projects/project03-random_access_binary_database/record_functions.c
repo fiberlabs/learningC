@@ -168,9 +168,38 @@ void list_all() {
 
     if (fclose(fp) != 0)
     {
-        perror("fclose() for add_record() failed");
+        perror("fclose() for list_all() failed");
         exit(1);
     }
 
     fp = NULL;
+}
+
+// VIEW RECORD LOGIC
+void get_requested_index(int index_to_fetch) { //list_indexes() is in menu_functions.c
+    FILE *fp = NULL;
+
+    fp = fopen("records.dat", "rb");
+    if (fp == NULL) {
+        perror("fopen() for get_requested_index() failed");
+        exit(1);
+    }
+
+    long offset = (index_to_fetch - 1) * sizeof(struct Record);
+    if (fseek(fp, offset, SEEK_SET) != 0) {
+        perror("fseek() in get_requested_index() failed\n");
+        fclose(fp);
+        exit(1);
+    }
+
+    struct Record record_index_to_get = {0};
+    fread(&record_index_to_get, sizeof(struct Record), 1, fp);
+    
+    printf("\n");
+    printf("Name: %s\nAge: %d\nSalary: %d\n", record_index_to_get.name, record_index_to_get.age, record_index_to_get.salary);
+
+    if (fclose(fp) != 0) {
+        perror("fclose() for get_requested_index() failed");
+        exit(1);
+    }
 }
