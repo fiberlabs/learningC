@@ -145,3 +145,32 @@ void add_record(char *name_parameter, int age_parameter, int salary_parameter)
 
     printf("Added record for %s successfully\n", new_record.name);
 }
+
+// LIST ALL LOGIC
+void list_all() {
+    struct Record recieve_record = {0};
+
+    FILE *fp = NULL;
+    fp = fopen("records.dat", "rb");
+    if (fp == NULL) {
+        perror("fopen() for list_all() returned NULL");
+        exit(1);
+    }
+
+    int index = 0;
+
+    while (fread(&recieve_record, sizeof(struct Record), 1, fp) == 1) 
+    {
+        printf("\n");
+        printf("Index: %d\nName: %s\nAge: %d\nSalary: %d\n", index + 1, recieve_record.name, recieve_record.age, recieve_record.salary);
+        index++;
+    }
+
+    if (fclose(fp) != 0)
+    {
+        perror("fclose() for add_record() failed");
+        exit(1);
+    }
+
+    fp = NULL;
+}

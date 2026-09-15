@@ -30,8 +30,8 @@ int print_menu()
 {
     printf("===MENU===\n");
     printf("1. ADD RECORD\n");
-    printf("1. VIEW RECORD\n");
-    printf("1. LIST ALL\n");
+    printf("2. VIEW RECORD\n");
+    printf("3. LIST ALL\n");
     printf("4. QUIT\n");
 
     int user_input = get_menu_input();

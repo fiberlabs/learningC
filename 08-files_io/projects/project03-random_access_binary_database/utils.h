@@ -16,3 +16,6 @@ int get_age();
 int get_salary();
 
 void add_record(char *name_parameter, int age_parameter, int salary_parameter);
+
+//list all functions
+void list_all();

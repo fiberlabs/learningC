@@ -22,10 +22,12 @@ int main() {
 
         //VIEW RECORD LOGIC
         break;
-    case 3:
 
+    case 3:
         //LIST ALL LOGIC
+        list_all();
         break;
+
     case 4:
         //QUIT PROGRAM LOGIC
         break;
@@ -33,8 +35,6 @@ int main() {
     default:
         break;
     }
-
-    printf("you chose: %d\n", user_input);
 
     return 0;
 }
