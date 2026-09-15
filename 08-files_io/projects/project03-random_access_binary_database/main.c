@@ -10,6 +10,12 @@ int main() {
     {
     case 1:
         //ADD RECORD LOGIC
+        char *name_para = get_name();
+        int age_para = get_age();
+        int salary_para = get_salary();
+
+        add_record(name_para, age_para, salary_para);
+
         break;
 
     case 2:
@@ -27,7 +33,7 @@ int main() {
     default:
         break;
     }
-    
+
     printf("you chose: %d\n", user_input);
 
     return 0;
