@@ -17,6 +17,9 @@ int main() {
 
         add_record(name_para, age_para, salary_para);
 
+        free(name_para);
+        name_para = NULL;
+
         break;
 
     case 2:

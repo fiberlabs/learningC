@@ -118,7 +118,8 @@ void add_record(char *name_parameter, int age_parameter, int salary_parameter)
 
     struct Record new_record = {0};
 
-    strcpy(new_record.name, name_parameter);
+    strncpy(new_record.name, name_parameter, sizeof(new_record.name) - 1);
+    new_record.name[sizeof(new_record.name) - 1] = '\0';
     new_record.age = age_parameter;
     new_record.salary = salary_parameter;
 
@@ -138,9 +139,7 @@ void add_record(char *name_parameter, int age_parameter, int salary_parameter)
         perror("fclose() for add_record() failed");
         exit(1);
     }
-
-    free(name_parameter); // we dont need this allocated memory anymore once the record is added
-    name_parameter = NULL;
+    
     fp = NULL;
 
     printf("Added record for %s successfully\n", new_record.name);
